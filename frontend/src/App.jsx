@@ -12,11 +12,13 @@ import AccessibleIcon from "@material-ui/icons/Accessible";
 import HearingIcon from "@material-ui/icons/Hearing";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import SpeakerNotesIcon from "@material-ui/icons/SpeakerNotes";
+import LocalHospitalIcon from "@material-ui/icons/LocalHospital";
 
 import Layout from "./layout";
 import Home from "./pages/Home";
 import Signin from "./pages/SignIn";
 import Dashboard from "./components/Dashboard";
+import Hospitals from "./components/Hospitals";
 
 import UserContext from "./context/UserContext";
 import { ProtectedRoute } from "./protected";
@@ -71,6 +73,12 @@ const componentList = [
 		url: "/forum",
 		component: About,
 		icon: SpeakerNotesIcon,
+	},
+	{
+		name: "Hospitals",
+		url: "/hospitals",
+		component: Hospitals,
+		icon: LocalHospitalIcon,
 	},
 ];
 
