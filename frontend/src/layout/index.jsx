@@ -27,6 +27,7 @@ import useStyles from "./styles";
 
 function Layout(props) {
 	const { userData, setUserData } = useContext(UserContext);
+
 	const {
 		window,
 		children,
@@ -75,7 +76,7 @@ function Layout(props) {
 					/>
 				</div>
 				<Typography>Welcome</Typography>
-				<Typography>{userData.user && userData.user.displayName}</Typography>
+				<Typography>{userData.user && userData.user.FIRST}</Typography>
 			</div>
 
 			<Divider />

@@ -65,9 +65,19 @@ exports.getCurrentPatient = async (req, res) => {
 	try {
 		const patient = await Patients.findById(req.user);
 
+		res.json(patient);
+	} catch (err) {
+		console.log(err);
+		res.json(null);
+	}
+};
+
+exports.getPatientById = async (req, res) => {
+	try {
+		const patient = await Patients.findById(req.params.id);
+
 		res.json({
-			displayName: patient.FIRST + " " + patient.LAST,
-			id: patient._id,
+			patient,
 		});
 	} catch (err) {
 		console.log(err);

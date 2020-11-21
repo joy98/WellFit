@@ -16,6 +16,7 @@ import SpeakerNotesIcon from "@material-ui/icons/SpeakerNotes";
 import Layout from "./layout";
 import Home from "./pages/Home";
 import Signin from "./pages/SignIn";
+import Dashboard from "./components/Dashboard";
 
 import UserContext from "./context/UserContext";
 import { ProtectedRoute } from "./protected";
@@ -32,7 +33,7 @@ const componentList = [
 	{
 		name: "Dashboard",
 		url: "/",
-		component: Home,
+		component: Dashboard,
 		icon: DashboardIcon,
 	},
 	{

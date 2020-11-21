@@ -1,8 +1,10 @@
 const express = require("express");
-const { getCareplans } = require("../Controllers/careplansController");
+const {
+	getCareplansByPatientId,
+} = require("../Controllers/careplansController");
 
 const router = express.Router();
 
-router.get("/get-careplans", getCareplans);
+router.get("/get-careplans-by-patient-id/:id", getCareplansByPatientId);
 
 module.exports = router;

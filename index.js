@@ -18,6 +18,10 @@ const careplansRoute = require("./Routes/careplansRoute");
 const conditionsRoute = require("./Routes/conditionsRoute");
 const devicesRoute = require("./Routes/devicesRoute");
 const patientsRoute = require("./Routes/patientsRoute");
+const encountersRoute = require("./Routes/encountersRoute");
+const observationsRoute = require("./Routes/observationsRoute");
+const medicationsRoute = require("./Routes/medicationsRoute");
+const immunizationsRoute = require("./Routes/immunizationsRoute");
 
 app.use(cors());
 app.use(morgan("dev"));
@@ -25,16 +29,19 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 app.use(express.static(path.join(__dirname, "frontend", "build")));
-
-app.get("/*", (req, res) => {
-	res.sendFile(path.join(__dirname, "frontend", "build", "index.html"));
-});
-
 app.use("/api/", allergyRoute);
 app.use("/api/", careplansRoute);
 app.use("/api/", conditionsRoute);
 app.use("/api/", devicesRoute);
 app.use("/api/", patientsRoute);
+app.use("/api/", encountersRoute);
+app.use("/api/", observationsRoute);
+app.use("/api/", medicationsRoute);
+app.use("/api/", immunizationsRoute);
+
+app.get("/*", (req, res) => {
+	res.sendFile(path.join(__dirname, "frontend", "build", "index.html"));
+});
 
 mongoose
 	.connect(process.env.MONGO_URI, {

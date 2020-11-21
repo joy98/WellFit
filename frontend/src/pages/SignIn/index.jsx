@@ -23,6 +23,28 @@ export default function SignIn(props) {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 
+	const checkLoggedIn = async () => {
+		let token = localStorage.getItem("auth-token");
+		if (token === null) {
+			localStorage.setItem("auth-token", "");
+			token = "";
+		}
+		const tokenRes = await Axios.post("is-token-valid", null, {
+			headers: { "x-auth-token": token },
+		});
+
+		if (tokenRes.data) {
+			const userRes = await Axios.get("get-current-patient", {
+				headers: { "x-auth-token": token },
+			});
+
+			setUserData({
+				token: token,
+				user: userRes.data,
+			});
+		}
+	};
+
 	const handleLogin = async (event) => {
 		event.preventDefault();
 		try {
@@ -33,6 +55,7 @@ export default function SignIn(props) {
 				user: loginRes.data.user,
 			});
 			localStorage.setItem("auth-token", loginRes.data.token);
+			checkLoggedIn();
 			history.push("/");
 		} catch (e) {
 			console.log(e);

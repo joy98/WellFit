@@ -1,8 +1,8 @@
 const Conditions = require("../Models/conditions");
 
-exports.getConditions = async (req, res) => {
+exports.getConditionsByPatientId = async (req, res) => {
 	try {
-		const whatever = await Conditions.find({});
+		const whatever = await Conditions.find({ PATIENT: req.params.id });
 
 		return res.json(whatever);
 	} catch (err) {

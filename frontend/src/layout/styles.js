@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 	content: {
 		flexGrow: 1,
-		padding: theme.spacing(3),
+		// marginBottom: theme.spacing(3),
 	},
 	logoutBTN: {
 		marginLeft: "auto",
