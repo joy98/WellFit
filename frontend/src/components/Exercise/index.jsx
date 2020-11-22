@@ -66,7 +66,7 @@ export default function Exercise() {
             </IconButton>
           </Toolbar>
         </AppBar>
-        <Squats />
+        <Squats open={open} />
       </Dialog>
     </div>
   );
