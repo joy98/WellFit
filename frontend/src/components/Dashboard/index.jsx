@@ -4,7 +4,8 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
+import { Paper, Avatar } from "@material-ui/core";
+import FavoriteIcon from "@material-ui/icons/Favorite";
 
 import Careplans from "./Careplans";
 import Encounters from "./Encounters";
@@ -12,7 +13,7 @@ import Observations from "./Observations";
 import Medications from "./Medications";
 import Conditions from "./Conditions";
 
-import Axios from "axios";
+import Chart from "./Chart";
 
 import UserContext from "../../context/UserContext";
 import { CssBaseline, Typography } from "@material-ui/core";
@@ -22,6 +23,11 @@ const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
 	root: {
 		display: "flex",
+	},
+	logoutBTN: {
+		display: "flex",
+		alignItems: "center",
+		marginRight: 20,
 	},
 	toolbar: {
 		paddingRight: 24, // keep right padding when drawer closed
@@ -84,9 +90,9 @@ const useStyles = makeStyles((theme) => ({
 		overflow: "auto",
 		margin: 0,
 		padding: 0,
+		display: "block",
 	},
 	container: {
-		// paddingTop: theme.spacing(4),
 		paddingBottom: theme.spacing(4),
 	},
 	paper: {
@@ -95,9 +101,8 @@ const useStyles = makeStyles((theme) => ({
 		overflow: "auto",
 		flexDirection: "column",
 	},
-	fixedHeight: {
-		height: 240,
-	},
+
+	large: { width: theme.spacing(15), height: theme.spacing(15) },
 }));
 
 export default function Dashboard() {
@@ -111,14 +116,33 @@ export default function Dashboard() {
 		<main className={classes.content}>
 			<CssBaseline />
 			<div className={classes.appBarSpacer} />
-			<Container maxWidth="lg" className={classes.container}>
+			<Container maxWidth="xl" className={classes.container}>
 				<Grid container spacing={3}>
-					<Grid item xs={12} md={8} lg={9}>
-						<Paper className={fixedHeightPaper}></Paper>
-					</Grid>
-
 					<Grid item xs={12} md={4} lg={3}>
 						<Paper className={fixedHeightPaper}>
+							<div
+								style={{
+									display: "flex",
+									flexDirection: "column",
+									padding: 10,
+								}}
+							>
+								<div
+									style={{
+										display: "flex",
+										justifyContent: "center",
+										marginBottom: 10,
+									}}
+								>
+									<Avatar
+										className={classes.large}
+										src="https://avatars.dicebear.com/api/male/adas.svg"
+										alt="avatar"
+									/>
+								</div>
+								<Typography>Welcome</Typography>
+								<Typography>{userData.user && userData.user.FIRST}</Typography>
+							</div>
 							<Typography>
 								Expenses:
 								{userData.user && " " + userData.user.HEALTHCARE_EXPENSES}
@@ -127,7 +151,24 @@ export default function Dashboard() {
 								Coverage:
 								{userData.user && " " + userData.user.HEALTHCARE_COVERAGE}
 							</Typography>
+							<div className={classes.logoutBTN}>
+								<FavoriteIcon color="secondary" />
+								<Typography>
+									Points: {userData.user && userData.user.POINTS}
+								</Typography>
+							</div>
+							<div className={classes.logoutBTN}>
+								<FavoriteIcon color="secondary" />
+								<Typography>
+									Cal: {userData.user && userData.user.CALORIE}
+								</Typography>
+							</div>
 						</Paper>
+					</Grid>
+					<Grid item xs={12} md={8} lg={9}>
+						<div className={fixedHeightPaper}>
+							<Chart userData={userData} />
+						</div>
 					</Grid>
 
 					<Grid item xs={12}>
@@ -150,7 +191,7 @@ export default function Dashboard() {
 							<Medications userData={userData} />
 						</Paper>
 					</Grid>
-					<Grid item xs={12}>
+					{/*<Grid item xs={12}>
 						<Paper className={classes.paper}>
 							<Observations userData={userData} />
 						</Paper>
@@ -159,7 +200,7 @@ export default function Dashboard() {
 						<Paper className={classes.paper}>
 							<Medications userData={userData} />
 						</Paper>
-					</Grid>
+					</Grid> */}
 				</Grid>
 			</Container>
 		</main>

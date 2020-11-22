@@ -82,6 +82,12 @@ const patientsSchema = new mongoose.Schema({
 	PASSWORD: {
 		type: String,
 	},
+	POINTS: {
+		type: Number,
+	},
+	CALORIE: {
+		type: Number,
+	},
 });
 
 module.exports = mongoose.model("Patients", patientsSchema);

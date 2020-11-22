@@ -21,6 +21,7 @@ import {
 
 import { useTheme } from "@material-ui/core/styles";
 import MenuIcon from "@material-ui/icons/Menu";
+import FavoriteIcon from "@material-ui/icons/Favorite";
 
 import UserContext from "../context/UserContext";
 import useStyles from "./styles";
@@ -113,7 +114,7 @@ function Layout(props) {
 					color="primary"
 					onClick={handleLogout}
 				>
-					LOG OUT
+					LOGOUT
 				</Button>
 			</div>
 		</div>
@@ -139,14 +140,19 @@ function Layout(props) {
 					<Typography variant="h6" noWrap>
 						Optum's Hackathon
 					</Typography>
-					<Button
-						className={classes.logoutBTN}
-						variant="contained"
-						color="secondary"
-						onClick={handleLogout}
-					>
-						LOG OUT
-					</Button>
+					<div className={classes.logoutBTN}>
+						<div className={classes.logoutBTN}>
+							<FavoriteIcon color="secondary" />
+							<Typography>{userData.user && userData.user.POINTS}</Typography>
+						</div>
+						<Button
+							variant="contained"
+							color="secondary"
+							onClick={handleLogout}
+						>
+							LOGOUT
+						</Button>
+					</div>
 				</Toolbar>
 			</AppBar>
 			<nav className={classes.drawer} aria-label="mailbox folders">

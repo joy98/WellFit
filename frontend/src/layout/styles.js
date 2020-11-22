@@ -31,10 +31,13 @@ const useStyles = makeStyles((theme) => ({
 	},
 	content: {
 		flexGrow: 1,
-		// marginBottom: theme.spacing(3),
+		marginBottom: theme.spacing(3),
 	},
 	logoutBTN: {
 		marginLeft: "auto",
+		display: "flex",
+		alignItems: "center",
+		marginRight: 20,
 	},
 }));
 

@@ -50,10 +50,13 @@ export default function SignIn(props) {
 		try {
 			const loginUser = { email, password };
 			const loginRes = await Axios.post("login", loginUser);
-			setUserData({
-				token: loginRes.data.token,
-				user: loginRes.data.user,
-			});
+			console.log(loginRes);
+			if (loginRes.data.user) {
+				setUserData({
+					token: loginRes.data.token,
+					user: loginRes.data.user,
+				});
+			}
 			localStorage.setItem("auth-token", loginRes.data.token);
 			checkLoggedIn();
 			history.push("/");
