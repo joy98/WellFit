@@ -65,10 +65,21 @@ export default function SignIn(props) {
 	if (userData.user !== undefined) return <Redirect to="/" />;
 	return (
 		<Grid container component="main" className={classes.root}>
-			<Grid item xs={false} sm={4} md={7} className={classes.image} />
+			<Grid item xs={false} sm={4} md={7} className={classes.image}>
+				<img
+					height="auto"
+					width="100%"
+					src={require("../../assets/signinPhoto.jpg")}
+					alt="signinimage"
+					className={classes.gridImage}
+				/>
+			</Grid>
 			<Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
 				<div className={classes.paper}>
-					<Avatar className={classes.avatar}>
+					<Avatar
+						// src={require("../../assets/signinPhoto.jpg")}
+						className={classes.avatar}
+					>
 						<LockOutlinedIcon />
 					</Avatar>
 					<Typography component="h1" variant="h5">
