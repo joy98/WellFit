@@ -1,36 +1,28 @@
-import React, { useState, useCallback, useEffect, useRef } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import React, {
+	useState,
+	useCallback,
+	useEffect,
+	useRef,
+	useContext,
+} from "react";
+
 import "@tensorflow/tfjs";
 import * as tmPose from "@teachablemachine/pose";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  Grid,
-  CircularProgress,
-  Typography,
-  Paper,
-  Button,
-} from "@material-ui/core";
+import Axios from "axios";
+import UserContext from "../../../context/UserContext";
+import useStyles from "./styles";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    margin: theme.spacing(3),
-  },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-  },
-  sideButtons: {
-    display: "flex",
-    flexDirection: "column",
-    padding: theme.spacing(3),
-    justifyContent: "space-evenly",
-  },
-}));
+import {
+	Dialog,
+	DialogContent,
+	DialogTitle,
+	Grid,
+	CircularProgress,
+	Typography,
+	Paper,
+	Button,
+} from "@material-ui/core";
 
 const URL = "https://teachablemachine.withgoogle.com/models/QJYOZCCFV/";
 const modelURL = URL + "model.json";
@@ -40,145 +32,177 @@ let model, webcam, ctx, maxPredictions;
 let globalCount = 0;
 
 export default function Squat({ open }) {
-  const canvasRef = useRef(null);
-  const containerRef = useRef(null);
+	const canvasRef = useRef(null);
+	const containerRef = useRef(null);
+	const { userData } = useContext(UserContext);
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [finalPrediction, setFinalPrediction] = useState("");
-  const [caloriesBurned, setCaloriesBurned] = useState(0);
-  const [count, setCount] = useState(0);
-  const classes = useStyles();
+	const [isLoading, setIsLoading] = useState(false);
+	const [finalPrediction, setFinalPrediction] = useState("");
+	const [caloriesBurned, setCaloriesBurned] = useState(0);
+	const [count, setCount] = useState(0);
+	const classes = useStyles();
 
-  useEffect(() => {
-    if (finalPrediction === "squat") {
-      globalCount += 1;
-      setCount(globalCount);
-    }
-  }, [finalPrediction]);
+	const predict = useCallback(async () => {
+		const { pose, posenetOutput } = await model.estimatePose(webcam.canvas);
+		const prediction = await model.predict(posenetOutput);
 
-  useEffect(() => {
-    setCaloriesBurned(globalCount);
-  }, [count]);
+		for (let i = 0; i < maxPredictions; i++) {
+			if (prediction[i].probability > 0.7) {
+				setFinalPrediction(prediction[i].className);
+			}
+		}
 
-  const predict = useCallback(async () => {
-    const { pose, posenetOutput } = await model.estimatePose(webcam.canvas);
-    const prediction = await model.predict(posenetOutput);
+		drawPose(pose);
+	}, []);
 
-    for (let i = 0; i < maxPredictions; i++) {
-      if (prediction[i].probability > 0.7) {
-        setFinalPrediction(prediction[i].className);
-      }
-    }
+	const loop = useCallback(
+		async (timestamp) => {
+			webcam.update();
+			await predict();
+			window.requestAnimationFrame(loop);
+		},
+		[predict]
+	);
 
-    drawPose(pose);
-  }, []);
+	function drawPose(pose) {
+		if (webcam.canvas) {
+			ctx.drawImage(webcam.canvas, 0, 0);
+			if (pose) {
+				const minPartConfidence = 0.5;
+				tmPose.drawKeypoints(pose.keypoints, minPartConfidence, ctx);
+				tmPose.drawSkeleton(pose.keypoints, minPartConfidence, ctx);
+			}
+		}
+	}
 
-  const loop = useCallback(
-    async (timestamp) => {
-      webcam.update();
-      await predict();
-      window.requestAnimationFrame(loop);
-    },
-    [predict]
-  );
+	const init = React.useCallback(async () => {
+		setIsLoading(true);
+		try {
+			model = await tmPose.load(modelURL, metadataURL);
+			maxPredictions = model.getTotalClasses();
+			let size = 400;
 
-  function drawPose(pose) {
-    if (webcam.canvas) {
-      ctx.drawImage(webcam.canvas, 0, 0);
-      if (pose) {
-        const minPartConfidence = 0.5;
-        tmPose.drawKeypoints(pose.keypoints, minPartConfidence, ctx);
-        tmPose.drawSkeleton(pose.keypoints, minPartConfidence, ctx);
-      }
-    }
-  }
+			if (containerRef.current) size = containerRef.current.offsetWidth - 100;
+			const flip = true;
+			webcam = new tmPose.Webcam(size, window.innerHeight - 200, size, flip);
 
-  const init = React.useCallback(async () => {
-    setIsLoading(true);
-    try {
-      model = await tmPose.load(modelURL, metadataURL);
-      maxPredictions = model.getTotalClasses();
-      let size = 400;
+			await webcam.setup();
+			await webcam.play();
 
-      if (containerRef.current) size = containerRef.current.offsetWidth - 100;
-      const flip = true;
-      webcam = new tmPose.Webcam(size, window.innerHeight - 200, size, flip);
+			window.requestAnimationFrame(loop);
 
-      await webcam.setup();
-      await webcam.play();
+			const canvas = canvasRef.current;
+			canvas.width = size;
+			canvas.height = size;
+			ctx = canvas.getContext("2d");
+		} catch (err) {
+			console.error(err);
+		} finally {
+			setIsLoading(false);
+		}
+	}, [loop]);
 
-      window.requestAnimationFrame(loop);
+	useEffect(() => {
+		if (finalPrediction === "squat") {
+			globalCount += 1;
+			setCount(globalCount);
+		}
+	}, [finalPrediction]);
 
-      const canvas = canvasRef.current;
-      canvas.width = size;
-      canvas.height = size;
-      ctx = canvas.getContext("2d");
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [loop]);
+	useEffect(() => {
+		setCaloriesBurned(globalCount);
+	}, [count]);
 
-  useEffect(() => {
-    navigator.getMedia =
-      navigator.getUserMedia ||
-      navigator.webkitGetUserMedia ||
-      navigator.mozGetUserMedia ||
-      navigator.msGetUserMedia;
+	useEffect(() => {
+		navigator.getMedia =
+			navigator.getUserMedia ||
+			navigator.webkitGetUserMedia ||
+			navigator.mozGetUserMedia ||
+			navigator.msGetUserMedia;
 
-    navigator.getMedia(
-      { video: true },
-      () => {
-        if (open) init();
-      },
-      () => {
-        if (open) alert("You dont have a webcam");
-      }
-    );
+		navigator.getMedia(
+			{ video: true },
+			() => {
+				if (open) init();
+			},
+			() => {
+				if (open) alert("You dont have a webcam");
+			}
+		);
 
-    if (!open) {
-      return () => {
-        if (webcam) webcam.stop();
-      };
-    }
-  }, [open, init]);
+		if (!open) {
+			return () => {
+				if (webcam) webcam.stop();
+			};
+		}
+	}, [open, init]);
 
-  return (
-    <div id="gg-container" style={{ width: "100%" }}>
-      <Dialog
-        open={isLoading}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">{"Setting up Ex"}</DialogTitle>
-        <DialogContent>
-          <CircularProgress />
-        </DialogContent>
-      </Dialog>
+	const handleCaloriPointModify = () => {
+		Axios.post(`post-modify-patient-calori-point-by-id/${userData.user._id}`, {
+			calori: caloriesBurned,
+			point: parseInt(caloriesBurned * 0.5),
+		});
+	};
 
-      <div className={classes.root}>
-        <Grid container spacing={3}>
-          <Grid item xs={6}>
-            <Paper ref={containerRef} className={classes.paper}>
-              <canvas ref={canvasRef} id="canvas" />
-            </Paper>
-          </Grid>
-          <Grid className={classes.sideButtons} item xs={6}>
-            <Paper className={classes.paper}>
-              <Typography>Position: {finalPrediction}</Typography>
-              <Typography>Calories Burned:{caloriesBurned}</Typography>
-            </Paper>
-            <Paper className={classes.paper}>
-              <Typography>Position: {finalPrediction}</Typography>
-              <Typography>Calories Burned:{caloriesBurned}</Typography>
-              <Button variant="contained">Save progress</Button>
-              <Button variant="contained">End</Button>
-              <Button variant="contained">Reset</Button>
-            </Paper>
-          </Grid>
-        </Grid>
-      </div>
-    </div>
-  );
+	return (
+		<div id="gg-container" style={{ width: "100%" }}>
+			<Dialog
+				open={isLoading}
+				aria-labelledby="alert-dialog-title"
+				aria-describedby="alert-dialog-description"
+			>
+				<DialogTitle id="alert-dialog-title">{"Setting up Ex"}</DialogTitle>
+				<DialogContent>
+					<CircularProgress />
+				</DialogContent>
+			</Dialog>
+
+			<div className={classes.root}>
+				<Grid container spacing={3}>
+					<Grid item xs={6}>
+						<Paper ref={containerRef} className={classes.paper}>
+							<canvas ref={canvasRef} id="canvas" />
+						</Paper>
+					</Grid>
+					<Grid className={classes.sideButtons} item xs={6}>
+						<Paper className={classes.paper}>
+							<Typography>Position: {finalPrediction}</Typography>
+							<Typography>Calories Burned:{caloriesBurned}</Typography>
+							<Typography>
+								Points Gained:{parseInt(caloriesBurned * 0.5)}
+							</Typography>
+						</Paper>
+						<Paper className={classes.paper}>
+							<Button
+								color="primary"
+								variant="contained"
+								onClick={handleCaloriPointModify}
+							>
+								Save progress
+							</Button>
+							<Button
+								color="secondary"
+								variant="contained"
+								onClick={handleCaloriPointModify}
+							>
+								End
+							</Button>
+							<Button
+								color="default"
+								variant="contained"
+								onClick={() => {
+									setCaloriesBurned(0);
+									setCount(0);
+									setFinalPrediction("");
+									globalCount = 0;
+								}}
+							>
+								Reset
+							</Button>
+						</Paper>
+					</Grid>
+				</Grid>
+			</div>
+		</div>
+	);
 }

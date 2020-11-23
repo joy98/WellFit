@@ -81,3 +81,26 @@ exports.getPatientById = async (req, res) => {
 		res.json(null);
 	}
 };
+
+exports.postModifyPatientCaloriPointById = async (req, res) => {
+	/*
+		accepts
+		{
+			'calori': 10,
+			'point':10
+		}
+	*/
+	try {
+		const patient = await Patients.findById(req.params.id);
+
+		patient.CALORIE += req.body.calori;
+		patient.POINTS += req.body.point;
+
+		await patient.save();
+
+		res.json(true);
+	} catch (err) {
+		console.error(err);
+		res.json(false);
+	}
+};
