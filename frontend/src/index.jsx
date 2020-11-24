@@ -23,6 +23,6 @@ import "./theme/variables.css";
 
 import axios from "axios";
 
-axios.defaults.baseURL = "/api/";
+axios.defaults.baseURL = "http://localhost:8100/api/";
 
 ReactDOM.render(<App />, document.getElementById("root"));
