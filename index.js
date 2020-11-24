@@ -26,11 +26,9 @@ const immunizationsRoute = require("./Routes/immunizationsRoute");
 const hospitalsRoute = require("./Routes/hospitalsRoute");
 
 app.use(cors());
-app.use(morgan("dev"));
+// app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(cookieParser());
-
-app.use(express.static(path.join(__dirname, "frontend", "build")));
 
 app.use("/api/", allergyRoute);
 app.use("/api/", careplansRoute);
@@ -43,9 +41,13 @@ app.use("/api/", medicationsRoute);
 app.use("/api/", immunizationsRoute);
 app.use("/api/", hospitalsRoute);
 
-app.get("/*", (req, res) => {
-	res.sendFile(path.join(__dirname, "frontend", "build", "index.html"));
-});
+if (process.env.NODE_ENV === "production") {
+	app.use(express.static(path.join(__dirname, "frontend", "build")));
+
+	app.get("/*", (req, res) => {
+		res.sendFile(path.join(__dirname, "frontend", "build", "index.html"));
+	});
+}
 
 mongoose
 	.connect(DATABASE_URI, {

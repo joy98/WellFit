@@ -127,8 +127,8 @@ export default function SignIn(props) {
 				<Paper style={{ padding: 20 }} className={classes.paper}>
 					<Typography variant="h5">
 						Use this Credentials to login <br />
-						Email: test18@test.com(any number between 1-1171) <br />
-						password: 123456
+						Email: test18@test.com (number between 1-1171) <br />
+						Password: 123456 (same for every user)
 					</Typography>
 				</Paper>
 			</Grid>
