@@ -24,7 +24,6 @@ export default function Orders({ userData }) {
 		if (userData.user) {
 			Axios.get(`get-careplans-by-patient-id/${userData.user.Id}`).then(
 				(res) => {
-					console.log(res.data);
 					let newRows = [];
 					for (let i in res.data) {
 						newRows.push(res.data[i]);

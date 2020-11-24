@@ -79,10 +79,7 @@ export default function SignIn(props) {
 			</Grid>
 			<Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
 				<div className={classes.paper}>
-					<Avatar
-						// src={require("../../assets/signinPhoto.jpg")}
-						className={classes.avatar}
-					>
+					<Avatar className={classes.avatar}>
 						<LockOutlinedIcon />
 					</Avatar>
 					<Typography component="h1" variant="h5">
@@ -127,6 +124,13 @@ export default function SignIn(props) {
 						</Button>
 					</form>
 				</div>
+				<Paper style={{ padding: 20 }} className={classes.paper}>
+					<Typography variant="h5">
+						Use this Credentials to login <br />
+						Email: test18@test.com(any number between 1-1171) <br />
+						password: 123456
+					</Typography>
+				</Paper>
 			</Grid>
 		</Grid>
 	);

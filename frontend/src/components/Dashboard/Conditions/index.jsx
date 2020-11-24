@@ -24,7 +24,6 @@ export default function Conditions({ userData }) {
 		if (userData.user) {
 			Axios.get(`get-conditions-by-patient-id/${userData.user.Id}`).then(
 				(res) => {
-					console.log(res.data);
 					let newRows = [];
 					for (let i in res.data) {
 						newRows.push(res.data[i]);

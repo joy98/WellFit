@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import clsx from "clsx";
+import { Link } from "react-router-dom";
 
 import {
 	Paper,
@@ -8,6 +9,7 @@ import {
 	Typography,
 	Grid,
 	Container,
+	Button,
 } from "@material-ui/core";
 
 import FavoriteIcon from "@material-ui/icons/Favorite";
@@ -18,7 +20,6 @@ import Encounters from "./Encounters";
 import Medications from "./Medications";
 import Conditions from "./Conditions";
 import Chart from "./Chart";
-// import Observations from "./Observations";
 
 import useStyles from "./styles";
 import UserContext from "../../context/UserContext";
@@ -62,14 +63,21 @@ export default function Dashboard() {
 									/>
 								</div>
 								<Typography>Welcome</Typography>
-								<Typography>{userData.user && userData.user.FIRST}</Typography>
 								<Typography>
-									Expenses:
-									{userData.user && " " + userData.user.HEALTHCARE_EXPENSES}
+									{userData.user &&
+										userData.user.FIRST + " " + userData.user.LAST}
 								</Typography>
 								<Typography>
-									Coverage:
-									{userData.user && " " + userData.user.HEALTHCARE_COVERAGE}
+									Expenses:
+									<strong>
+										{userData.user && " " + userData.user.HEALTHCARE_EXPENSES}
+									</strong>
+								</Typography>
+								<Typography>
+									Coverage:{" "}
+									<strong>
+										{userData.user && " " + userData.user.HEALTHCARE_COVERAGE}
+									</strong>
 								</Typography>
 								<div className={classes.logoutBTN}>
 									<FavoriteIcon color="secondary" />
@@ -83,6 +91,16 @@ export default function Dashboard() {
 									<Typography>
 										{userData.user && "  " + userData.user.CALORIE}(Cal)
 									</Typography>
+								</div>
+								<div className={classes.logoutBTN}>
+									<Button
+										variant="contained"
+										color="primary"
+										component={Link}
+										to="/exercise"
+									>
+										Go to exercise
+									</Button>
 								</div>
 							</div>
 						</Paper>
@@ -108,16 +126,6 @@ export default function Dashboard() {
 							<Medications userData={userData} />
 						</Paper>
 					</Grid>
-					{/* <Grid item xs={12}>
-						<Paper className={classes.paper}>
-							<Observations userData={userData} />
-						</Paper>
-					</Grid>
-					<Grid item xs={12}>
-						<Paper className={classes.paper}>
-							<Medications userData={userData} />
-						</Paper>
-					</Grid> */}
 				</Grid>
 			</Container>
 		</main>
