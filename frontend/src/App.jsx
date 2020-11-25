@@ -23,6 +23,7 @@ import Dashboard from "./components/Dashboard";
 import Hospitals from "./components/Hospitals";
 import DiseasePrediction from "./components/DiseasePrediction";
 import MealPlan from "./components/MealPlan";
+import HealthCareAI from "./components/HealthCareAI";
 
 const componentList = [
 	{
@@ -40,7 +41,7 @@ const componentList = [
 	{
 		name: "Disease Prediction",
 		url: "/disease-prediction",
-		component: DiseasePrediction,
+		component: HealthCareAI,
 		icon: HealingIcon,
 	},
 	{

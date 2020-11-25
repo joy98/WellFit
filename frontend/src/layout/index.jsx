@@ -56,14 +56,12 @@ function Layout(props) {
 
 	const drawer = (
 		<div>
-			<Hidden smDown>
-				<div className={classes.toolbar} />
-			</Hidden>
+			<div className={classes.toolbar} />
 			<div
 				style={{
 					display: "flex",
 					flexDirection: "column",
-					padding: 10,
+					padding: 20,
 				}}
 			>
 				<div
@@ -136,7 +134,7 @@ function Layout(props) {
 		<div className={classes.root}>
 			<CssBaseline />
 			<AppBar position="absolute" className={classes.appBar}>
-				<Toolbar>
+				<Toolbar style={{ minHeight: 48 }}>
 					<IconButton
 						color="inherit"
 						aria-label="open drawer"
