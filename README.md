@@ -1,6 +1,10 @@
 # Start The application
 
-## Available Scripts
+### `git clone https://github.com/AvishekGhost/WellFit.git`
+
+It will clone this Repo 
+
+Now cd into the folder and do the following
 
 In the project directory, you can run:
 ### `npm install -g @ionic/cli`
@@ -21,7 +25,7 @@ This will install the React Application's dependencies
 ### `ionic serve`
 
 Runs the app in the development mode.<br />
-Open [http://localhost:8100](http://localhost:8100) to view it in the browser.
+Open [`http://localhost:8100`](http://localhost:8100) to view it in the browser.
 
 The page will reload if you make edits.<br />
 You will also see any lint errors in the console.
