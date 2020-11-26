@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
 import axios from "axios";
 
-import { Button } from "@material-ui/core";
-import Paper from "@material-ui/core/Paper";
-import InputBase from "@material-ui/core/InputBase";
-import IconButton from "@material-ui/core/IconButton";
+import { Chip, Paper, InputBase, IconButton } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 
 import useStyles from "./styles";
 import MealPlanCards from "./MealPlanCards";
+
+const APP_ID = "36afd93c";
+const APP_KEY = "2370df71755a998111926ab26fa97a42";
 
 const mealsList = [
 	"Eggs",
@@ -36,9 +36,6 @@ const mealsList = [
 
 export default function MealPlan() {
 	const classes = useStyles();
-
-	const APP_ID = "36afd93c";
-	const APP_KEY = "2370df71755a998111926ab26fa97a42";
 
 	const [fetchedData, setFetchedData] = React.useState([]);
 	const [randomMeals, setRandomMeals] = React.useState([]);
@@ -71,7 +68,6 @@ export default function MealPlan() {
 		axios
 			.get(URL)
 			.then((res) => {
-				console.log(res.data);
 				let newDatas = [];
 				for (const d of res.data.hints) {
 					let gg = d;
@@ -101,7 +97,6 @@ export default function MealPlan() {
 					justifyContent: "center",
 					alignItems: "center",
 					flexDirection: "column",
-					padding: 50,
 				}}
 			>
 				<Paper className={classes.root}>
@@ -121,21 +116,18 @@ export default function MealPlan() {
 						<SearchIcon />
 					</IconButton>
 				</Paper>
-				<div>
+				<div style={{ margin: 10 }}>
 					{randomMeals.map((item, idx) => {
 						return (
-							<Button
-								color="secondary"
-								variant="outlined"
-								style={{ margin: 10 }}
-								key={idx}
+							<Chip
+								style={{ margin: 5 }}
 								onClick={() => {
 									setSearchMeal(item.toString());
 									searchMealFromAPI(item);
 								}}
-							>
-								{item}
-							</Button>
+								label={item}
+								variant="outlined"
+							/>
 						);
 					})}
 				</div>

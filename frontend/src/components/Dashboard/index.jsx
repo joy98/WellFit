@@ -35,12 +35,12 @@ export default function Dashboard() {
 			<div className={classes.appBarSpacer} />
 			<Container maxWidth="xl" className={classes.container}>
 				<Grid container spacing={3}>
-					<Grid item xs={12} md={8} lg={9}>
+					<Grid item xs={12} md={9}>
 						<div className={fixedHeightPaper}>
 							<Chart userData={userData} />
 						</div>
 					</Grid>
-					<Grid item xs={12} md={4} lg={3}>
+					<Grid item xs={12} md={3}>
 						<Paper className={fixedHeightPaper}>
 							<div
 								style={{

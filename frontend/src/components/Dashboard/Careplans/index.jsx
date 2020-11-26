@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import { TableRow, Typography } from "@material-ui/core";
+
+import {
+	TableRow,
+	Typography,
+	Hidden,
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+} from "@material-ui/core";
 
 import Axios from "axios";
 
@@ -35,33 +40,49 @@ export default function Orders({ userData }) {
 	}, [userData]);
 
 	return (
-		<React.Fragment>
-			<Typography component="h2" variant="h6" color="primary" gutterBottom>
-				Your Careplans
-			</Typography>
-			<Table size="small">
-				<TableHead>
-					<TableRow>
-						<TableCell>Start date</TableCell>
-						<TableCell>Stop date</TableCell>
-						<TableCell>Description</TableCell>
-						<TableCell>Code</TableCell>
-						<TableCell align="right">Reason Description</TableCell>
-					</TableRow>
-				</TableHead>
-				<TableBody>
-					{rows.map((row, idx) => (
-						<TableRow key={idx}>
-							<TableCell>{row.START}</TableCell>
-							<TableCell>{row.STOP}</TableCell>
-							<TableCell>{row.DESCRIPTION}</TableCell>
-							<TableCell>{row.CODE}</TableCell>
-							<TableCell align="right">{row.REASONDESCRIPTION}</TableCell>
-						</TableRow>
-					))}
-				</TableBody>
-			</Table>
-			<div className={classes.seeMore} />
-		</React.Fragment>
+		<>
+			{rows.length > 0 ? (
+				<>
+					<Typography component="h2" variant="h6" color="primary" gutterBottom>
+						Your Careplans
+					</Typography>
+					<Table size="small">
+						<TableHead>
+							<TableRow>
+								<Hidden smDown>
+									<TableCell>Start date</TableCell>
+									<TableCell>Stop date</TableCell>
+								</Hidden>
+								<TableCell>Description</TableCell>
+								<Hidden smDown>
+									<TableCell>Code</TableCell>
+								</Hidden>
+								<TableCell align="right">Reason Description</TableCell>
+							</TableRow>
+						</TableHead>
+						<TableBody>
+							{rows.map((row, idx) => (
+								<TableRow key={idx}>
+									<Hidden smDown>
+										<TableCell>{row.START}</TableCell>
+										<TableCell>{row.STOP}</TableCell>
+									</Hidden>
+									<TableCell>{row.DESCRIPTION}</TableCell>
+									<Hidden smDown>
+										<TableCell>{row.CODE}</TableCell>
+									</Hidden>
+									<TableCell align="right">{row.REASONDESCRIPTION}</TableCell>
+								</TableRow>
+							))}
+						</TableBody>
+					</Table>
+					<div className={classes.seeMore} />
+				</>
+			) : (
+				<Typography variant="h6" color="secondary">
+					You don't have any Careplans
+				</Typography>
+			)}
+		</>
 	);
 }

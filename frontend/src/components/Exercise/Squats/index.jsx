@@ -34,7 +34,7 @@ let globalCount = 0;
 export default function Squat({ open }) {
 	const canvasRef = useRef(null);
 	const containerRef = useRef(null);
-	const { userData } = useContext(UserContext);
+	const { userData, setUserData } = useContext(UserContext);
 
 	const [isLoading, setIsLoading] = useState(false);
 	const [finalPrediction, setFinalPrediction] = useState("");
@@ -82,9 +82,12 @@ export default function Squat({ open }) {
 			maxPredictions = model.getTotalClasses();
 			let size = 400;
 
-			if (containerRef.current) size = containerRef.current.offsetWidth - 100;
+			if (containerRef.current && window.innerHeight) {
+				size = Math.min(containerRef.current.offsetWidth, window.innerHeight);
+				size -= 100;
+			}
 			const flip = true;
-			webcam = new tmPose.Webcam(size, window.innerHeight - 200, size, flip);
+			webcam = new tmPose.Webcam(size, flip);
 
 			await webcam.setup();
 			await webcam.play();
@@ -142,6 +145,15 @@ export default function Squat({ open }) {
 			calori: caloriesBurned,
 			point: parseInt(caloriesBurned * 0.5),
 		});
+
+		let newUser = userData;
+		newUser.user.POINTS += parseInt(caloriesBurned * 0.5);
+		newUser.user.CALORIE += caloriesBurned;
+
+		setUserData({
+			token: newUser.token,
+			user: newUser.user,
+		});
 	};
 
 	return (
@@ -159,12 +171,12 @@ export default function Squat({ open }) {
 
 			<div className={classes.root}>
 				<Grid container spacing={3}>
-					<Grid item xs={6}>
+					<Grid item xs={12} md={6}>
 						<Paper ref={containerRef} className={classes.paper}>
 							<canvas ref={canvasRef} id="canvas" />
 						</Paper>
 					</Grid>
-					<Grid className={classes.sideButtons} item xs={6}>
+					<Grid className={classes.sideButtons} item xs={12} md={6}>
 						<Paper className={classes.paper}>
 							<Typography>Position: {finalPrediction}</Typography>
 							<Typography>Calories Burned:{caloriesBurned}</Typography>

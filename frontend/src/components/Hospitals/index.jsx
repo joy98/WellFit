@@ -83,7 +83,6 @@ export default function DialogSelect() {
 					display: "flex",
 					justifyContent: "center",
 					alignItems: "center",
-					padding: 50,
 				}}
 			>
 				<div>

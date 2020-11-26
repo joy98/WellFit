@@ -24,7 +24,7 @@ function Alert(props) {
 
 const MealPlanCards = ({ fetchedData }) => {
 	const classes = useStyles();
-	const { userData } = useContext(UserContext);
+	const { userData, setUserData } = useContext(UserContext);
 	const [open, setOpen] = React.useState(false);
 
 	const handleClick = () => {
@@ -45,6 +45,14 @@ const MealPlanCards = ({ fetchedData }) => {
 			point: -point,
 		}).then((res) => {
 			if (res.data) handleClick();
+		});
+
+		let newUser = userData;
+		newUser.user.POINTS += -point;
+
+		setUserData({
+			token: newUser.token,
+			user: newUser.user,
 		});
 	};
 
