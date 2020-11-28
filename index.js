@@ -9,7 +9,7 @@ const path = require("path");
 
 dotenv.config();
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3000;
 const DATABASE_URI = process.env.MONGODB_URI;
 
 const app = express();
