@@ -6,9 +6,9 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import FastfoodIcon from "@material-ui/icons/Fastfood";
-import HealingIcon from "@material-ui/icons/Healing";
 import LocalHospitalIcon from "@material-ui/icons/LocalHospital";
 import AccessibilityNewIcon from "@material-ui/icons/AccessibilityNew";
+import AdbIcon from "@material-ui/icons/Adb";
 
 import UserContext from "./context/UserContext";
 import { ProtectedRoute } from "./protected";
@@ -21,7 +21,6 @@ import Signin from "./pages/SignIn";
 import Exercise from "./components/Exercise";
 import Dashboard from "./components/Dashboard";
 import Hospitals from "./components/Hospitals";
-import DiseasePrediction from "./components/DiseasePrediction";
 import MealPlan from "./components/MealPlan";
 import HealthCareAI from "./components/HealthCareAI";
 
@@ -39,10 +38,10 @@ const componentList = [
 		icon: FastfoodIcon,
 	},
 	{
-		name: "Disease Prediction",
-		url: "/disease-prediction",
+		name: "HealthCare AI",
+		url: "/health-care-AI",
 		component: HealthCareAI,
-		icon: HealingIcon,
+		icon: AdbIcon,
 	},
 	{
 		name: "Exercise",
